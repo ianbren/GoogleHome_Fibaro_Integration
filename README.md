@@ -3,13 +3,13 @@
 This shows integration from Google Home (GH) (or Assistant) through IFTTT to Fibaro HC2.
 
 The infrastructure required
-1. - a Google Home on the Network
-2. - Fibaro HC2 on the Network
-3. - an ESP8266 (I used a WEMOS D1 Mini) with associated code
-4. - a Free Tier of AWS containing
-  - a DynamoDB with one recored - the command to be executed
-  - a Lambda to control access to the record
-  - an AWS API to give web access for read and write
+1. a Google Home on the Network
+2.  Fibaro HC2 on the Network
+3.  an ESP8266 (I used a WEMOS D1 Mini) with associated code
+4.  a Free Tier of AWS containing
+    - a DynamoDB with one recored - the command to be executed
+    - a Lambda to control access to the record
+    - an AWS API to give web access for read and write
 5. - an IFTTT that'll hook the Asistant Command to the AWS API endpoint.
 
 Flow
