@@ -10,7 +10,7 @@ The infrastructure required
     - a DynamoDB with one recored - the command to be executed
     - a Lambda to control access to the record
     - an AWS API to give web access for read and write
-5. - an IFTTT that'll hook the Asistant Command to the AWS API endpoint.
+5.  an IFTTT that'll hook the Asistant Command to the AWS API endpoint.
 
 Flow
 - the user requests "hey google turn the lounge light on"
