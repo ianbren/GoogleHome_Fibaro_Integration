@@ -1,4 +1,4 @@
-# GoogleHome_Fibaro_Integration
+# Google Home to Fibaro Integration
 
 This shows integration from Google Home (GH) (or Assistant) through IFTTT to Fibaro HC2.
 
