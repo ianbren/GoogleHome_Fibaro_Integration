@@ -91,8 +91,3 @@ end
 
 -- Start
 MyObject:main ()
-
-
-
-
-
