@@ -1,5 +1,5 @@
 
-#AWS Configuration Details
+# AWS Configuration Details
 
 The AWS configuration consists of three components
 	- DynamoDB - where a request is stored as a record in the database
