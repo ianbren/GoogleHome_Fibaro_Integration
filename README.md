@@ -23,6 +23,6 @@ Flow
   - If a change is found then an HTTP 200 is passed back from the ESP8266 to the Fibaro, with a JSON payload  mapped to a Fibaro Device command
   - The ESP8266 clears the DynamoDB record
   
-  
+  !end of File!
 - 
 
