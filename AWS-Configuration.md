@@ -1,3 +1,4 @@
+
 #AWS Configuration Details
 
 The AWS configuration consists of three components
@@ -30,4 +31,6 @@ Where
 	"fbComments": -		No use given
 	"fbGuid": 		- 	A GUID or shared secret stored in ESP8266 and IFTTT.
 	
+	
 Useful Links - Fibaro URL http://www.smarthome.com.au/smarthome-blog/fibaro-home-center-http-commands/
+
