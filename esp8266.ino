@@ -17,3 +17,24 @@
       -
 
 */
+
+/*
+Process
+ESP starts up, connects to local WIFI and calls AWS to clear out any AWS DynamoDB records.
+
+loop() 
+		- checks for HTTP requests - servicing if required
+		- periodically check AWS for any change to the Record
+			- if there is a new update is read, then the JSON is parsed out (DynamoDB has a "[" "]" array structure that has to be removed)
+			- postToFibaro() is called to construct the URL to the Fibaro API
+			- Once this is done then the AWS record is cleared.
+			
+TODO
+====
+	- build out the error checking when there's a loss of comms to AWS.
+	- Build out the config details of the app - change SSID etc
+	- Publish the XLS that simplifes the IFTTT format
+	
+			
+*/
+
