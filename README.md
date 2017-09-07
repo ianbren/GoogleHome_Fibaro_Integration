@@ -17,12 +17,18 @@ Flow
 - GH hooks into the IFTTT command
 - IFTTT calls the AWS API end Point with the payload requred in JSON format
 - the Payload is written to the DynamoDB record via API and Lambda
-- The Fibaro polls the ESP8266 periodically 
-  - The ESP8266 (on request from the Fibaro) calls the  API "GET" command, looking for a change in the DynamoDB JSON record
-  - If no change is found an HTTP 204 is passed back from the ESP8266 to the Fibaro
-  - If a change is found then an HTTP 200 is passed back from the ESP8266 to the Fibaro, with a JSON payload  mapped to a Fibaro Device command
-  - The ESP8266 clears the DynamoDB record
-  
-  !end of File!
-- 
+- The ESP8266 (ESP) polls the AWS API periodically (per second in this version) and looks for a nominated record number (myID).
+	-	when a non-zero ID is found (i.e. when a record has been posted by IFTTT) then 
+			- the ESP pulls down the JSON record and processes it
+			- Determines if this is a Device or a Scene to be run
+			- directly updates the appropriate object in Fibaro
+			- clears the AWS record ready for the next update
+			
+	_Benefits of the approach_
+	- the Fibaro does not have to poll the ESP - this can take a number of seconds, on top of the polling time that the ESP takes to contact AWS.
+	- the permissions of the Fibaro can be used to limit the scope of the ESP.  This can prevent an error in the AWS record propogating to Fibaro
+	- we can use the simple Fibaro API, rather than the REST API
+	
+[end of file]
+
 
