@@ -1,20 +1,26 @@
 /*
+
+Goal - use the ESP to pol AWS for commands targeted for the Google Home
+
+Model
+
+- Google Assitant or Google Home commands are written on IFTT.  
+- IFTTT calls an AWS Lambda API that posts to DynamoDB
+- The ESP polls the API looking for a specific record, when it is found, it is pulled down
+	- the ESP maps the JSON into the API for Fibaro
+	- The ESP calls the FIBARO API
+	- The AWS data is wiped (to prevent it being pulled down again)
+	- Loops
+	
+
+ESP8266 code to read and write to AWS DynamoDB via Lambda functions
+
    Setting up AWS - https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
    Fibaro URL format - http://www.smarthome.com.au/smarthome-blog/fibaro-home-center-http-commands/
 */
 
 /*
-   V3 - last one that uses Fibaro to drive schedule
-   V4 - polls AWS every second and directly calls Fibaro to post the details to the Device
-     - initial version posts to a Virtual Device and then have Fibaro read the details.
-     - Structure
-     - fbID - the Fibaro Device to be actioned - Zero is no action
-     - fbType - "Scene" or "Device" - taken from AWS record
-     - fbAction - what is to be done (turnOn/turnOff etc)
-     fbGUID - not used, but ready for when we confirm the record hasn't been updated outside this process
-
-   V5 - Reviewing the URL pattern used to send commands
-      -
+ 
 
 */
 
@@ -27,7 +33,7 @@ loop()
 		- periodically check AWS for any change to the Record
 			- if there is a new update is read, then the JSON is parsed out (DynamoDB has a "[" "]" array structure that has to be removed)
 			- postToFibaro() is called to construct the URL to the Fibaro API
-			- Once this is done then the AWS record is cleared.
+			- Once this is done then the AWS record is cleared, ready for the next Google Assitant command.
 			
 TODO
 ====

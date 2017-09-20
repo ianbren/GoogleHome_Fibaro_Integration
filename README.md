@@ -10,12 +10,12 @@ The infrastructure required
     - a DynamoDB with one recored - the command to be executed
     - a Lambda to control access to the record
     - an AWS API to give web access for read and write
-5.  an IFTTT that'll hook the Asistant Command to the AWS API endpoint.
+5.  an IFTTT account that'll hook the Asistant Command to the AWS API endpoint.
 
 Flow
 - the user requests "hey google turn the lounge light on"
 - GH hooks into the IFTTT command
-- IFTTT calls the AWS API end Point with the payload requred in JSON format
+- IFTTT calls the AWS API end-point with the payload requred in JSON format
 - the Payload is written to the DynamoDB record via API and Lambda
 - The ESP8266 (ESP) polls the AWS API periodically (per second in this version) and looks for a nominated record number (myID).
 	-	when a non-zero ID is found (i.e. when a record has been posted by IFTTT) then 
@@ -25,9 +25,9 @@ Flow
 			- clears the AWS record ready for the next update
 			
 	_Benefits of the approach_
-	- the Fibaro does not have to poll the ESP - this can take a number of seconds, on top of the polling time that the ESP takes to contact AWS.
+	- Reduced time from request to action being completed.  The Fibaro takes time to poll the ESP, delaying the action being pulled down from AWS
 	- the permissions of the Fibaro can be used to limit the scope of the ESP.  This can prevent an error in the AWS record propogating to Fibaro
-	- we can use the simple Fibaro API, rather than the REST API
+	- we can use the simple Fibaro API, rather than the REST API - so it's all in the URL
 	
 [end of file]
 
