@@ -32,8 +32,7 @@ The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-ga
 
 
 
-_Where_ 
-Where 
+**Where**
 - "myID"				- 	The single record used to transfer data - any other record is ignored
 - "fbID"				-		The Fibaro ID for the object to be called - found from the Fibaro UI
 - "fbType"			-		Device/Scene - depending on what is being called on the Fibaro.  The URL is constructed differently
