@@ -13,16 +13,11 @@ Model
 	- Loops
 	
 
-ESP8266 code to read and write to AWS DynamoDB via Lambda functions
 
    Setting up AWS - https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
    Fibaro URL format - http://www.smarthome.com.au/smarthome-blog/fibaro-home-center-http-commands/
 */
 
-/*
- 
-
-*/
 
 /*
 Process
@@ -37,10 +32,10 @@ loop()
 			
 TODO
 ====
-	- build out the error checking when there's a loss of comms to AWS.
+	- there's not a loss of error checking - esp comms to AWS.
 	- Build out the config details of the app - change SSID etc
+	- Add checking code that the GUID we're expecting in the record is actually in the field
 	- Publish the XLS that simplifes the IFTTT format
-			
 */
 
 #include "config.h" // the config details for the app
@@ -74,14 +69,14 @@ char jsonEmptyAction[] =   "\"fbAction\": \"0\"";  // the string as presented ba
 
 String jsonInput;  // empty at the moment
 
-// Use WiFiClientSecure class to create TLS connection
+// Use WiFiClientSecure class to create TLS connection to AWS
 WiFiClientSecure client;
 
 // web server for Fibaro or user to call
 ESP8266WebServer server(80);
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT); // Built-in defined in ESP config
 
   Serial.begin(115200);
   Serial.println("");  Serial.println("................");
@@ -117,8 +112,8 @@ void loop() {
 
 
   if (currentMillis - previousMillis >= interval) {
-    //
-    previousMillis = currentMillis;
+
+	previousMillis = currentMillis;
     Serial.println("Polling AWS");
 
     // do this now, so that we don't have to worry about missing it if there's a
@@ -129,7 +124,7 @@ void loop() {
     /// check AWS for an update
     if (checkAws() != 0) {
 
-      // we will pull apart the JSON now to find the JSON details
+      // we will now pull apart the AWS JSON now to find the useful JSON details
       JsonObject& root = jsonBuffer.parseObject(jsonInput);
       root.printTo(Serial);
       Serial.println("");
@@ -140,7 +135,11 @@ void loop() {
         return ;  // TODO -- need to think what we do here
       }
 
-      const int foundFbID = root["fbID"];
+      const int foundFbID = root["fbID"];  
+			// We don't have to check that we got the correct row back, since the AWS API specifies the recordID we want
+			// TODO - we do need to check we got back the right GUID though 
+			
+			
       char foundFbAction[20];
       char foundFbType[20];
       char foundfbPayload[100];
@@ -288,7 +287,7 @@ int postToFibaro(char fibaroAddress[], int deviceID, char fbType[],  char fbActi
 
 
   http.begin(hostUrl);
-  http.setAuthorization(fbBase64UserName);
+  http.setAuthorization(fbBase64UserName);  // username:Password in base64
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
   Serial.print("Calling URL: ");
