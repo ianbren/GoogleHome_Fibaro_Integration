@@ -11,7 +11,9 @@ The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-ga
 	
 	
 **Note the DynamoDB record is of the following**  
+
 {
+
 	"myID": "0",
 
 	"fbID": "98",

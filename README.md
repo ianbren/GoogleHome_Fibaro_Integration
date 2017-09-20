@@ -2,17 +2,17 @@
 
 This shows integration from Google Home (GH) (or Assistant) through IFTTT to Fibaro HC2.
 
-The infrastructure required
+**The infrastructure required**
 1. a Google Home on the Network
 2.  Fibaro HC2 on the Network
 3.  an ESP8266 (I used a WEMOS D1 Mini) with associated code
 4.  a Free Tier of AWS containing
-    - a DynamoDB with one recored - the command to be executed
+    - a DynamoDB with one record - the command to be executed
     - a Lambda to control access to the record
     - an AWS API to give web access for read and write
 5.  an IFTTT account that'll hook the Asistant Command to the AWS API endpoint.
 
-Flow
+**Flow**
 - the user requests "hey google turn the lounge light on"
 - GH hooks into the IFTTT command
 - IFTTT calls the AWS API end-point with the payload requred in JSON format
@@ -24,11 +24,9 @@ Flow
 			- directly updates the appropriate object in Fibaro
 			- clears the AWS record ready for the next update
 			
-	_Benefits of the approach_
-	- Reduced time from request to action being completed.  The Fibaro takes time to poll the ESP, delaying the action being pulled down from AWS
-	- the permissions of the Fibaro can be used to limit the scope of the ESP.  This can prevent an error in the AWS record propogating to Fibaro
-	- we can use the simple Fibaro API, rather than the REST API - so it's all in the URL
-	
-[end of file]
+**Benefits of the approach**
+- Reduced time from request to action being completed.  The Fibaro takes time to poll the ESP, delaying the action being pulled down from AWS
+- the permissions of the Fibaro can be used to limit the scope of the ESP.  This can prevent an error in the AWS record propogating to Fibaro
+- we can use the simple Fibaro API, rather than the REST API - so it's all in the URL
 
 
