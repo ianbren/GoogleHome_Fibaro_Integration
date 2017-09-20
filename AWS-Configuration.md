@@ -1,7 +1,7 @@
 # AWS Configuration Details
 
 The AWS configuration consists of three components
-	- DynamoDB - where a request is stored as a record in the database
+- DynamoDB - where a request is stored as a record in the database
 	- The Application API 
 		- where the ESP8266 calls to get the Record as a JSON, or Updates a record
 		- where IFTTT posts data
