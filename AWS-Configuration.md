@@ -10,16 +10,16 @@ The AWS configuration consists of three components
 The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
 	
 	
-Note the DynamoDB record is of the following  
+**Note the DynamoDB record is of the following**  
 {
-	"myID": "0",
-	"fbID": "98",
-	"fbType":"Device",
-	"fbAction": "turnOff",
-	"fbPayload": " ",
-	"fbComments": "Turn Fountain Off",
-	"fbGuid": "this-is-a-guid-field"
-}	   
+>	"myID": "0",
+>	"fbID": "98",
+>	"fbType":"Device",
+>	"fbAction": "turnOff",
+>	"fbPayload": " ",
+>	"fbComments": "Turn Fountain Off",
+>	"fbGuid": "this-is-a-guid-field"
+>}	   
 
 
 
