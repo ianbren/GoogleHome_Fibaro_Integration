@@ -2,16 +2,16 @@
 
 The AWS configuration consists of three components
 - DynamoDB - where a request is stored as a record in the database
-	- The Application API 
-		- where the ESP8266 calls to get the Record as a JSON, or Updates a record
-		- where IFTTT posts data
-	- The AWS Lamdba - the "glue" between the API and DynamoDB.
+- The Application API 
+	- where the ESP8266 calls to get the Record as a JSON, or Updates a record
+	- where IFTTT posts data
+- The AWS Lamdba - the "glue" between the API and DynamoDB.
 	
-	The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
+The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
 	
 	
-	Note the DynamoDB record is of the following  
-	{
+Note the DynamoDB record is of the following  
+{
 	"myID": "0",
 	"fbID": "98",
 	"fbType":"Device",
@@ -24,13 +24,13 @@ The AWS configuration consists of three components
 
 
 Where 
-	"myID"				- 	The single record used to transfer data - any other record is ignored
-	"fbID"				-		The Fibaro ID for the object to be called - found from the Fibaro UI
-	"fbType"			-		Device/Scene - depending on what is being called on the Fibaro.  The URL is constructed differently
-	"fbAction":		-		The Fibaro Action - turnOn, turnOff, run, start etc
-	"fbPayload":	-		Additional Parameters if needed (e.g. fbAction = pressButton, fbPayload = "3" for button 3
-	"fbComments": -		No use given - could be omitted
-	"fbGuid": 		- 	A GUID or shared secret stored in ESP8266 and IFTTT.
+"myID"				- 	The single record used to transfer data - any other record is ignored
+"fbID"				-		The Fibaro ID for the object to be called - found from the Fibaro UI
+"fbType"			-		Device/Scene - depending on what is being called on the Fibaro.  The URL is constructed differently
+"fbAction":		-		The Fibaro Action - turnOn, turnOff, run, start etc
+"fbPayload":	-		Additional Parameters if needed (e.g. fbAction = pressButton, fbPayload = "3" for button 3
+"fbComments": -		No use given - could be omitted
+"fbGuid": 		- 	A GUID or shared secret stored in ESP8266 and IFTTT.
 	
 Useful Links - Fibaro URL http://www.smarthome.com.au/smarthome-blog/fibaro-home-center-http-commands/
 
