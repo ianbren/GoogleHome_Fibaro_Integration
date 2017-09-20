@@ -12,15 +12,6 @@ The setup for this is given at https://obviate.io/2015/08/05/tutorial-aws-api-ga
 	
 Note the DynamoDB record is of the following  
 {
-<<<<<<< HEAD
-"myID": "0",
-"fbID": "98",
-"fbType":"Device",
-"fbAction": "turnOff",
-"fbPayload": " ",
-"fbComments": "Turn Fountain Off",
-"fbGuid": "this-is-a-guid-field"
-=======
 	"myID": "0",
 	"fbID": "98",
 	"fbType":"Device",
@@ -28,16 +19,12 @@ Note the DynamoDB record is of the following
 	"fbPayload": " ",
 	"fbComments": "Turn Fountain Off",
 	"fbGuid": "this-is-a-guid-field"
->>>>>>> origin/master
 }	   
 
 
 
-<<<<<<< HEAD
 _Where_ 
-=======
 Where 
->>>>>>> origin/master
 "myID"				- 	The single record used to transfer data - any other record is ignored
 "fbID"				-		The Fibaro ID for the object to be called - found from the Fibaro UI
 "fbType"			-		Device/Scene - depending on what is being called on the Fibaro.  The URL is constructed differently
