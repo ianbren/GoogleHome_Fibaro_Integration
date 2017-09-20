@@ -1,8 +1,6 @@
 /*
 
-Goal - use the ESP to poll AWS for commands targeted for the Google Home
-
-Model
+Goal - use the ESP8266 (ESP) to poll AWS for commands targeted for the Google Home
 
 - Google Assitant or Google Home commands are written on IFTT.  
 - IFTTT calls an AWS Lambda API that posts to DynamoDB
@@ -12,30 +10,19 @@ Model
 	- The AWS data is wiped (to prevent it being pulled down again)
 	- Loops
 	
-
-
-   Setting up AWS - https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
+AWS tutirial at - https://obviate.io/2015/08/05/tutorial-aws-api-gateway-to-lambda-to-dynamodb/
    Fibaro URL format - http://www.smarthome.com.au/smarthome-blog/fibaro-home-center-http-commands/
 */
 
 
 /*
-Process
-ESP starts up, connects to local WIFI and calls AWS to clear out any AWS DynamoDB records.
-
-loop() 
-		- checks for HTTP requests - servicing if required
-		- periodically check AWS for any change to the Record
-			- if there is a new update is read, then the JSON is parsed out (DynamoDB has a "[" "]" array structure that has to be removed)
-			- postToFibaro() is called to construct the URL to the Fibaro API
-			- Once this is done then the AWS record is cleared, ready for the next Google Assitant command.
-			
 TODO
 ====
 	- there's not a loss of error checking - esp comms to AWS.
 	- Build out the config details of the app - change SSID etc
 	- Add checking code that the GUID we're expecting in the record is actually in the field
 	- Publish the XLS that simplifes the IFTTT format
+	- when a web client calls - return the last JSON, not the "blank" one. 
 */
 
 #include "config.h" // the config details for the app
@@ -54,12 +41,12 @@ const long ledInterval = 500;
 
 unsigned long previousMillis = 0;        // will store last time AWS was polled
 const long interval = 500;           // interval at which to poll AWS and update Fibaro
-//  there's a few seconds within the AWS call - so this just stops a race condition
+//  there's a few seconds already within the AWS call - so this just stops a race condition
 
 
 // ****** Fibaro Details ******
-HTTPClient http;  // used to send info to Fibaro
-// different Fibaro URLs for a Device and a String call
+HTTPClient http;  // used to send info to Fibaro - doesn't need SSL
+// NOTE - different Fibaro URLs for a Device and a String call
 char fbDeviceString[] = "http://%s/api/callAction?deviceID=%d&name=%s&arg1=%s";
 char fbSceneString[] = "http://%s/api/sceneControl?id=%d&action=%s&arg1=%s";
 
@@ -82,6 +69,7 @@ void setup() {
   Serial.println("");  Serial.println("................");
   Serial.print("Startup.  Version: ");  Serial.println(version);
 
+// just sending build information to the Serial Port
   Serial.print (F(__DATE__)) ;
   Serial.print (" ") ;
   Serial.println (F(__TIME__)) ;
@@ -105,11 +93,11 @@ void loop() {
   //Reserve JSON Space
   StaticJsonBuffer<500> jsonBuffer;
 
-  blinkLed();
+  blinkLed();  // simple routine to flash the LED periodically.
 
   server.handleClient(); // deal with any web request.
-  // if the Fibaro is polling, this will be called every second or so.
-
+  // if a browser client, or the Fibaro calls, pass on the JSON - empty at the moment
+	
 
   if (currentMillis - previousMillis >= interval) {
 
