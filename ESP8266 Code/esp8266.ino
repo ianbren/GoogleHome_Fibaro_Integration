@@ -20,7 +20,6 @@ TODO
 ====
 	- there's not a loss of error checking - esp comms to AWS.
 	- Build out the config details of the app - change SSID etc
-	- Add checking code that the GUID we're expecting in the record is actually in the field
 	- Publish the XLS that simplifes the IFTTT format
 	- when a web client calls - return the last JSON, not the "blank" one. 
 */
@@ -55,6 +54,8 @@ char jsonEmpty[] = "{\"myID\": \"1\",\"fbID\": \"0\", \"fbType\": \"0\", \"fbAct
 char jsonEmptyAction[] =   "\"fbAction\": \"0\"";  // the string as presented back by AWS when we've got jsonEmpty[] back
 
 String jsonInput;  // empty at the moment
+//String jsonLastCommand; // the last known json from AWS - used to deliver update to HTTP Req
+
 
 // Use WiFiClientSecure class to create TLS connection to AWS
 WiFiClientSecure client;
@@ -80,10 +81,10 @@ void setup() {
   server.begin();
 
   // initial clearing of any data in AWS - so we don't pick up any odd commands in the buffer!
+
   clearAwsRecord(awsHost, awsPostUlr, httpsPort, jsonEmpty );
 
 }
-
 
 void loop() {
 
@@ -97,11 +98,11 @@ void loop() {
 
   server.handleClient(); // deal with any web request.
   // if a browser client, or the Fibaro calls, pass on the JSON - empty at the moment
-	
+
 
   if (currentMillis - previousMillis >= interval) {
 
-	previousMillis = currentMillis;
+    previousMillis = currentMillis;
     Serial.println("Polling AWS");
 
     // do this now, so that we don't have to worry about missing it if there's a
@@ -113,6 +114,7 @@ void loop() {
     if (checkAws() != 0) {
 
       // we will now pull apart the AWS JSON now to find the useful JSON details
+
       JsonObject& root = jsonBuffer.parseObject(jsonInput);
       root.printTo(Serial);
       Serial.println("");
@@ -123,27 +125,34 @@ void loop() {
         return ;  // TODO -- need to think what we do here
       }
 
-      const int foundFbID = root["fbID"];  
-			// We don't have to check that we got the correct row back, since the AWS API specifies the recordID we want
-			// TODO - we do need to check we got back the right GUID though 
-			
-			
+      const int foundFbID = root["fbID"];
+      // We don't have to check that we got the correct row back, since the AWS API specifies the recordID we want
+      // TODO - we do need to check we got back the right GUID though
+
+
+      char foundAwsGuid[50]; // Estimate of length of GUID used
       char foundFbAction[20];
       char foundFbType[20];
       char foundfbPayload[100];
 
-      strcpy(foundFbAction, (const char*)root["fbAction"]);
-      strcpy(foundFbType, (const char*)root["fbType"]);
-      strcpy(foundfbPayload, (const char*)root["fbPayload"]);
+      strcpy(foundAwsGuid, (const char*)root["fbGuid"]); // let's check the guid first
 
-      // do the Fibaro activity before clearing AWS - speed up response time to Fibaro
+      if (strcmp(awsGuid, foundAwsGuid) == 0)
+      {
+        strcpy(foundFbAction, (const char*)root["fbAction"]);
+        strcpy(foundFbType, (const char*)root["fbType"]);
+        strcpy(foundfbPayload, (const char*)root["fbPayload"]);
 
-      postToFibaro(fibaroAddress, foundFbID, foundFbType,  foundFbAction, foundfbPayload ) ;
+        // do the Fibaro activity before clearing AWS - speed up response time to Fibaro
+        postToFibaro(fibaroAddress, foundFbID, foundFbType,  foundFbAction, foundfbPayload ) ;
+      }      // else, we'll just ignore the record and clear it out.
+
       clearAwsRecord(awsHost, awsPostUlr, httpsPort, jsonEmpty );
     }
   }
 
 }
+
 
 /*
    Poll AWS looking for data inthe DynamoDB record

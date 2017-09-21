@@ -17,7 +17,7 @@ char awsPostUlr[]  = "/LambdaPublished/submitghdata";
 int httpsPort = 443;
 
 
-char guid[]  = "StickInAGuid Here"; // could be anything - byt https://guidgenerator.com/online-guid-generator.aspx is a good start
+char awsGuid[]  = "StickInAGuid Here"; // could be anything - byt https://guidgenerator.com/online-guid-generator.aspx is a good start
 
 // ****** Fibaro Details ******
 char* fibaroAddress  = "YourFibaroIpAddress";
