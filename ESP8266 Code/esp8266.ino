@@ -20,7 +20,6 @@ TODO
 ====
 	- there's not a loss of error checking - esp comms to AWS.
 	- Build out the config details of the app - change SSID etc
-	- Add checking code that the GUID we're expecting in the record is actually in the field
 	- Publish the XLS that simplifes the IFTTT format
 	- when a web client calls - return the last JSON, not the "blank" one. 
 */
@@ -55,6 +54,8 @@ char jsonEmpty[] = "{\"myID\": \"1\",\"fbID\": \"0\", \"fbType\": \"0\", \"fbAct
 char jsonEmptyAction[] =   "\"fbAction\": \"0\"";  // the string as presented back by AWS when we've got jsonEmpty[] back
 
 String jsonInput;  // empty at the moment
+//String jsonLastCommand; // the last known json from AWS - used to deliver update to HTTP Req
+
 
 // Use WiFiClientSecure class to create TLS connection to AWS
 WiFiClientSecure client;
@@ -80,6 +81,7 @@ void setup() {
   server.begin();
 
   // initial clearing of any data in AWS - so we don't pick up any odd commands in the buffer!
+
   clearAwsRecord(awsHost, awsPostUlr, httpsPort, jsonEmpty );
 
 }
@@ -112,6 +114,7 @@ void loop() {
     if (checkAws() != 0) {
 
       // we will now pull apart the AWS JSON now to find the useful JSON details
+
       JsonObject& root = jsonBuffer.parseObject(jsonInput);
       root.printTo(Serial);
       Serial.println("");
@@ -149,7 +152,6 @@ void loop() {
   }
 
 }
-
 
 
 /*
