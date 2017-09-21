@@ -3,3 +3,7 @@
 - call AWS
 - pass GUID
 - sample XLS maybe?
+
+
+
+-- Using Google Assistant Opject in IFTTT and "Maker" Object
