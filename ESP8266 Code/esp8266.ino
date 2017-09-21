@@ -84,7 +84,6 @@ void setup() {
 
 }
 
-
 void loop() {
 
   // poll AWS periodically
@@ -97,11 +96,11 @@ void loop() {
 
   server.handleClient(); // deal with any web request.
   // if a browser client, or the Fibaro calls, pass on the JSON - empty at the moment
-	
+
 
   if (currentMillis - previousMillis >= interval) {
 
-	previousMillis = currentMillis;
+    previousMillis = currentMillis;
     Serial.println("Polling AWS");
 
     // do this now, so that we don't have to worry about missing it if there's a
@@ -123,27 +122,35 @@ void loop() {
         return ;  // TODO -- need to think what we do here
       }
 
-      const int foundFbID = root["fbID"];  
-			// We don't have to check that we got the correct row back, since the AWS API specifies the recordID we want
-			// TODO - we do need to check we got back the right GUID though 
-			
-			
+      const int foundFbID = root["fbID"];
+      // We don't have to check that we got the correct row back, since the AWS API specifies the recordID we want
+      // TODO - we do need to check we got back the right GUID though
+
+
+      char foundAwsGuid[50]; // Estimate of length of GUID used
       char foundFbAction[20];
       char foundFbType[20];
       char foundfbPayload[100];
 
-      strcpy(foundFbAction, (const char*)root["fbAction"]);
-      strcpy(foundFbType, (const char*)root["fbType"]);
-      strcpy(foundfbPayload, (const char*)root["fbPayload"]);
+      strcpy(foundAwsGuid, (const char*)root["fbGuid"]); // let's check the guid first
 
-      // do the Fibaro activity before clearing AWS - speed up response time to Fibaro
+      if (strcmp(awsGuid, foundAwsGuid) == 0)
+      {
+        strcpy(foundFbAction, (const char*)root["fbAction"]);
+        strcpy(foundFbType, (const char*)root["fbType"]);
+        strcpy(foundfbPayload, (const char*)root["fbPayload"]);
 
-      postToFibaro(fibaroAddress, foundFbID, foundFbType,  foundFbAction, foundfbPayload ) ;
+        // do the Fibaro activity before clearing AWS - speed up response time to Fibaro
+        postToFibaro(fibaroAddress, foundFbID, foundFbType,  foundFbAction, foundfbPayload ) ;
+      }      // else, we'll just ignore the record and clear it out.
+
       clearAwsRecord(awsHost, awsPostUlr, httpsPort, jsonEmpty );
     }
   }
 
 }
+
+
 
 /*
    Poll AWS looking for data inthe DynamoDB record
